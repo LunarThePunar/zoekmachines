@@ -15,7 +15,9 @@ class Article(Document):
     exchanges = Keyword()
     companies = Keyword()
 
+    class Index:
+        name = 'reuters_set'
+
     def save(self, ** kwargs):
-        self.lines = len(self.body.split())
         return super(Article, self).save(** kwargs)
 
