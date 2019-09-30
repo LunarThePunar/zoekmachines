@@ -19,7 +19,7 @@ def get_list_from_tag(text, tag):
     output = []
 
     for i in text.find(tag).find_all("d"):
-        output.append(i.text)
+        output.append(i.get_text())
     return output
 
 
@@ -50,11 +50,11 @@ def index_directory(directory):
                     pass
                 
                 # get the data contained in the text field
-                title = text.find("title").text
-                body = text.find("body").text
+                title = text.find("title").get_text()
+                body = text.find("body").get_text()
 
                 # get the date of the article
-                date_string = i.find('date').text.strip()
+                date_string = i.find('date').get_text().strip()
                 # some files have noise after the date, this strips it off
                 # if the date_string is longer than expected
                 if len(date_string) > 23:
@@ -93,7 +93,7 @@ if __name__ == "__main__":
     except IndexError:
         print("Please provide a valid directory")
         exit(1)
-    except Exception as e:
-        print(e)
-        exit(1)
+    # except Exception as e:
+    #     print(e)
+    #     exit(1)
 
