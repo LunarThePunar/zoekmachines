@@ -1,4 +1,8 @@
 from flask import Flask, jsonify, request
+from elasticsearch_dsl import Search
+from elasticsearch_dsl.connections import connections
+
+connections.create_connection(hosts=["localhost"])
 
 app = Flask(__name__)
 
@@ -61,3 +65,32 @@ def topics():
         topics = [name.replace("\n", "") for name in f.readlines()]
 
         return jsonify(topics)
+
+@app.route("/api/search", methods = ["POST"])
+def search():
+    data = request.get_json()
+    query = data['query']
+
+    people = data['people']
+    exchanges = data['exchanges']
+    orgs = data['orgs']
+    places = data['places']
+    topics = data['topics']
+
+    search_dict = {
+        "from": 0,
+        "query": {
+            "bool": {
+                "must": [
+                    {"query_string": {"query": query}},
+                ],
+            }
+        }
+    }
+
+    search = Search.from_dict(search_dict)
+    response = search.execute()
+
+    print(response)
+
+    return ""
