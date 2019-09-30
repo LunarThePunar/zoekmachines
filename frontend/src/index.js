@@ -49,50 +49,55 @@ class App extends Component {
     var arr = [];
     if (option) {
       option.forEach(item => arr.push(item["value"]));
-      this.setState({
-        selectedPeople: arr
-      });
     }
+
+    this.setState({
+      selectedPeople: arr
+    });
   }
 
   selectOrgs = option => {
     var arr = [];
     if (option) {
       option.forEach(item => arr.push(item["value"]));
-      this.setState({
-        selectedOrgs: arr
-      });
     }
+
+    this.setState({
+      selectedOrgs: arr
+    });
   }
 
   selectTopics = option => {
     var arr = [];
     if (option) {
       option.forEach(item => arr.push(item["value"]));
-      this.setState({
-        selectedTopics: arr
-      });
     }
+
+    this.setState({
+      selectedTopics: arr
+    });
   }
 
   selectPlaces = option => {
     var arr = [];
     if (option) {
       option.forEach(item => arr.push(item["value"]));
-      this.setState({
-        selectedPlaces: arr
-      });
     }
+
+    this.setState({
+      selectedPlaces: arr
+    });
   }
 
   selectExchanges = option => {
     var arr = [];
     if (option) {
       option.forEach(item => arr.push(item["value"]));
-      this.setState({
-        selectedExchanges: arr
-      });
     }
+
+    this.setState({
+      selectedExchanges: arr
+    });
   }
 
   async loadPeople() {
@@ -259,6 +264,7 @@ class App extends Component {
           <div className="searchbutton">
             <input onClick={() => this.search()} type="button" value="Search" className="button"></input>
             <input onClick={() => this.onSetSidebarOpen(true)} type="button" value="Advanced Search" className="button"></input>
+            <input onClick={() => console.log(this.state)} type="button" value="Test" className="button"></input>
           </div>
         </div>
       </div>
