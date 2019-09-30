@@ -14,7 +14,7 @@ def people():
     in frontend
     """
     with open("../data/people", "r") as f:
-        people = [name.replace("\n", "") for name in f.readlines()]
+        people = [name.replace("\n", "").strip() for name in f.readlines()]
 
         return jsonify(people)
 
@@ -26,7 +26,7 @@ def orgs():
     in frontend
     """
     with open("../data/orgs", "r") as f:
-        orgs = [name.replace("\n", "") for name in f.readlines()]
+        orgs = [name.replace("\n", "").strip() for name in f.readlines()]
 
         return jsonify(orgs)
 
@@ -38,7 +38,7 @@ def exchanges():
     in frontend
     """
     with open("../data/exchanges", "r") as f:
-        exchanges = [name.replace("\n", "") for name in f.readlines()]
+        exchanges = [name.replace("\n", "").strip() for name in f.readlines()]
 
         return jsonify(exchanges)
 
@@ -50,7 +50,7 @@ def places():
     in frontend
     """
     with open("../data/places", "r") as f:
-        places = [name.replace("\n", "") for name in f.readlines()]
+        places = [name.replace("\n", "").strip() for name in f.readlines()]
 
         return jsonify(places)
 
@@ -62,7 +62,7 @@ def topics():
     in frontend
     """
     with open("../data/topics", "r") as f:
-        topics = [name.replace("\n", "") for name in f.readlines()]
+        topics = [name.replace("\n", "").strip() for name in f.readlines()]
 
         return jsonify(topics)
 
@@ -85,12 +85,38 @@ def search():
                     {"query_string": {"query": query}},
                 ],
             }
+        },
+        "post_filter": {
+            "bool": {"must": []}
         }
     }
 
-    search = Search.from_dict(search_dict)
-    response = search.execute()
+    if topics:
+        search_dict['post_filter']['bool']['must'].append(
+                {"terms": {"topics": topics}}
+            )
+    if places:
+        search_dict['post_filter']['bool']['must'].append(
+                {"terms": {"places": places}}
+            )
+    if people:
+        search_dict['post_filter']['bool']['must'].append(
+                {"terms": {"people": people}}
+            )
+    if orgs:
+        search_dict['post_filter']['bool']['must'].append(
+                {"terms": {"orgs": orgs}}
+            )
+    if exchanges:
+        search_dict['post_filter']['bool']['must'].append(
+                {"terms": {"exchanges": exchanges}}
+            )
 
-    print(response)
+    s = Search.from_dict(search_dict)
+    response = s.execute()
 
-    return ""
+    titles = [list(i['places']) for i in response]
+
+    return jsonify({
+        "data": list(titles)
+    })
