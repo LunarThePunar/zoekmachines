@@ -34,11 +34,7 @@
   box-shadow: 0 1px 6px 0 rgba(32,33,36,0.28);
 }
 
-.button:focus {
-  outline: none;
-}
-
-.searchbutton > input {
+.button {
   background-color: #f2f2f2;
   border: 1px solid #f2f2f2;
   border-radius: 5px;
@@ -50,6 +46,11 @@
   height: 36px;
   min-width: 54px;
   padding: 0 16px;
+}
+
+.button:focus {
+  outline: none;
+
 }
 
 .topbar {
