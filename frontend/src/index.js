@@ -1,5 +1,4 @@
 import "./index.css";
-import {BrowserRouter, Route, Switch} from "react-router-dom";
 import React, {Component} from "react";
 import ReactDOM from "react-dom"
 import Sidebar from "react-sidebar";
@@ -28,7 +27,8 @@ class App extends Component {
       selectedOrgs: [],
       selectedPlaces: [],
       selectedTopics: [],
-      selectedExchanges: []
+      selectedExchanges: [],
+      query: ""
     };
     this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
     this.content = this.content.bind(this);
@@ -38,6 +38,12 @@ class App extends Component {
     this.setState({ selectedOption });
     console.log(`Option selected:`, selectedOption);
   };
+
+  handleQuery = query => {
+    this.setState( {
+      query: query.target.value
+    })
+  }
 
   selectPeople = option => {
     var arr = [];
@@ -162,6 +168,29 @@ class App extends Component {
     await this.loadExchanges();
   }
 
+
+  async search() {
+    const payload = {
+      query: this.state.query,
+      places: this.state.selectedPlaces,
+      people: this.state.selectedPeople,
+      orgs: this.state.selectedOrgs,
+      exchanges: this.state.selectedExchanges,
+      topics: this.state.selectedTopics
+    }
+    try {
+      await axios.post('/api/search', payload, {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+    } catch(error) {
+      console.log("ERROR: Could not perform search query");
+      console.log(error);
+    }
+    
+  }
+
   content () {
     return (
       <div>
@@ -205,6 +234,7 @@ class App extends Component {
           isSearchable={true}
           isMulti={true}
         />
+        <input onClick={() => this.search()} type="button" value="Search" className="button"></input>
       </div>
     );
   }
@@ -225,9 +255,9 @@ class App extends Component {
         <div className="logo">
         </div>
         <div className="query">
-          <input className="searchbar" v-model="query"></input>
+          <input className="searchbar" value={this.state.query} onChange={this.handleQuery}></input>
           <div className="searchbutton">
-            <input onClick={() => console.log(this.state)} type="button" value="Search" className="button"></input>
+            <input onClick={() => this.search()} type="button" value="Search" className="button"></input>
             <input onClick={() => this.onSetSidebarOpen(true)} type="button" value="Advanced Search" className="button"></input>
           </div>
         </div>
