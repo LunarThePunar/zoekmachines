@@ -1,3 +1,4 @@
+import "./search.css";
 import React, {Component} from "react";
 import Sidebar from "react-sidebar";
 import Select from 'react-select';
