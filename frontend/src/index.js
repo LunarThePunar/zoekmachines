@@ -19,22 +19,75 @@ class App extends Component {
     super(props);
     this.state = {
       sidebarOpen: false,
-      selectedOption: null,
       people: [],
       orgs: [],
       places: [],
       topics: [],
       exchanges: [],
+      selectedPeople: [],
+      selectedOrgs: [],
+      selectedPlaces: [],
+      selectedTopics: [],
+      selectedExchanges: []
     };
     this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
     this.content = this.content.bind(this);
-
   }
 
   handleChange = selectedOption => {
     this.setState({ selectedOption });
     console.log(`Option selected:`, selectedOption);
   };
+
+  selectPeople = option => {
+    var arr = [];
+    if (option) {
+      option.forEach(item => arr.push(item["value"]));
+      this.setState({
+        selectedPeople: arr
+      });
+    }
+  }
+
+  selectOrgs = option => {
+    var arr = [];
+    if (option) {
+      option.forEach(item => arr.push(item["value"]));
+      this.setState({
+        selectedOrgs: arr
+      });
+    }
+  }
+
+  selectTopics = option => {
+    var arr = [];
+    if (option) {
+      option.forEach(item => arr.push(item["value"]));
+      this.setState({
+        selectedTopics: arr
+      });
+    }
+  }
+
+  selectPlaces = option => {
+    var arr = [];
+    if (option) {
+      option.forEach(item => arr.push(item["value"]));
+      this.setState({
+        selectedPlaces: arr
+      });
+    }
+  }
+
+  selectExchanges = option => {
+    var arr = [];
+    if (option) {
+      option.forEach(item => arr.push(item["value"]));
+      this.setState({
+        selectedExchanges: arr
+      });
+    }
+  }
 
   async loadPeople() {
     try {
@@ -88,7 +141,6 @@ class App extends Component {
     }
   }
 
-
   async loadExchanges() {
     try {
       const response = await axios.get("/api/exchanges");
@@ -101,8 +153,6 @@ class App extends Component {
       console.log(error);  
     }
   }
-
-
 
   async componentDidMount() {
     await this.loadPeople();
@@ -118,7 +168,7 @@ class App extends Component {
         <h3 className="header">Country</h3>
         <Select
           value={this.selectedOption}
-          onChange={this.handleChange}
+          onChange={this.selectPlaces}
           options={this.state.places}
           isSearchable={true}
           isMulti={true}
@@ -126,7 +176,7 @@ class App extends Component {
         <h3 className="header">Topics</h3>
         <Select
           value={this.selectedOption}
-          onChange={this.handleChange}
+          onChange={this.selectTopics}
           options={this.state.topics}
           isSearchable={true}
           isMulti={true}
@@ -134,7 +184,7 @@ class App extends Component {
         <h3 className="header">People</h3>
         <Select
           value={this.selectedOption}
-          onChange={this.handleChange}
+          onChange={this.selectPeople}
           options={this.state.people}
           isSearchable={true}
           isMulti={true}
@@ -142,7 +192,7 @@ class App extends Component {
         <h3 className="header">Organisations</h3>
         <Select
           value={this.selectedOption}
-          onChange={this.handleChange}
+          onChange={this.selectOrgs}
           options={this.state.orgs}
           isSearchable={true}
           isMulti={true}
@@ -150,7 +200,7 @@ class App extends Component {
         <h3 className="header">Exchanges</h3>
         <Select
           value={this.selectedOption}
-          onChange={this.handleChange}
+          onChange={this.selectExchanges}
           options={this.state.exchanges}
           isSearchable={true}
           isMulti={true}
@@ -177,7 +227,7 @@ class App extends Component {
         <div className="query">
           <input className="searchbar" v-model="query"></input>
           <div className="searchbutton">
-            <input type="button" value="Search" className="button"></input>
+            <input onClick={() => console.log(this.state)} type="button" value="Search" className="button"></input>
             <input onClick={() => this.onSetSidebarOpen(true)} type="button" value="Advanced Search" className="button"></input>
           </div>
         </div>
