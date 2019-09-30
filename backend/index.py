@@ -93,7 +93,4 @@ if __name__ == "__main__":
     except IndexError:
         print("Please provide a valid directory")
         exit(1)
-    # except Exception as e:
-    #     print(e)
-    #     exit(1)
 
