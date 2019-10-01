@@ -5,6 +5,7 @@ import React, {Component} from "react";
 export default class ResultBody extends Component {
     constructor(props) {
         super(props);
+        console.log(this.props.id)
         this.state = {
             id: 0
         };
@@ -16,7 +17,7 @@ export default class ResultBody extends Component {
       return (
         <div className="resultBody">
             <div className="titleSection">
-                <a className="title">{this.props.title}</a> <br/>
+                <a href={"/article/" + this.props.id} className="title">{this.props.title}</a> <br/>
                 <span className="date">{this.props.date}</span>
             </div>
             <div className="summary">

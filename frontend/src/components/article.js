@@ -8,8 +8,11 @@ export default class Article extends Component {
 
     constructor(props) {
         super(props);
+
+        console.log(this.props.match.params.id)
+
         this.state = {
-            id: 12,
+            id: this.props.match.params.id ? this.props.match.params.id : 1, 
             body: ""
         };
     
