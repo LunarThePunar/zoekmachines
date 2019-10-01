@@ -262,7 +262,6 @@ export default class Search extends Component {
           <div className="searchbutton">
             <input onClick={() => this.search()} type="button" value="Search" className="button"></input>
             <input onClick={() => this.onSetSidebarOpen(true)} type="button" value="Advanced Search" className="button"></input>
-            <input onClick={() => console.log(this.state)} type="button" value="Test" className="button"></input>
           </div>
         </div>
       </div>
