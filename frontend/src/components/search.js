@@ -25,6 +25,7 @@ export default class Search extends Component {
     };
     this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
     this.content = this.content.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
   handleChange = selectedOption => {
@@ -240,6 +241,12 @@ export default class Search extends Component {
     this.setState({ sidebarOpen: open });
   }
 
+  handleKeyPress = (event) => {
+    if(event.key === 'Enter'){
+      this.search();
+    }
+  }
+
   render() {
     return (
       <Sidebar
@@ -252,7 +259,7 @@ export default class Search extends Component {
         <div className="logo">
         </div>
         <div className="query">
-          <input className="searchbar" value={this.state.query} onChange={this.handleQuery}></input>
+          <input className="searchbar" value={this.state.query} onChange={this.handleQuery} onKeyPress={this.handleKeyPress}></input>
           <div className="searchbutton">
             <input onClick={() => this.search()} type="button" value="Search" className="button"></input>
             <input onClick={() => this.onSetSidebarOpen(true)} type="button" value="Advanced Search" className="button"></input>
