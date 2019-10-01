@@ -257,7 +257,7 @@ export default class Search extends Component {
         styles={{ sidebar: { background: "white", padding: "10px", minWidth: "350px"} }}
       >
       <div className="index">
-        <div className="logo">
+        <div className="logoMain">
           <img className="logo__image" src={Reutle}></img>
         </div>
         <div className="query">
