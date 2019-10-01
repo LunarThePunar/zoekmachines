@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from elasticsearch_dsl import Search
 from elasticsearch_dsl.connections import connections
+from datetime import datetime
 
 connections.create_connection(hosts=["localhost"])
 
@@ -113,10 +114,23 @@ def search():
             )
 
     s = Search.from_dict(search_dict)
-    response = s.execute()
+    search_result = s.execute()
 
-    titles = [list(i['places']) for i in response]
+    response = []
+
+    for hit in search_result:
+        result = {
+            "title": hit.title.replace("<", "").replace(">", ""),
+            "summary": hit.body[:252] + "...",
+            "date": datetime.fromisoformat(hit.date).strftime("%d %B, %Y"),
+            "id": hit.meta.id
+        }
+
+        response.append(result)
+
+    for hit in search_result:
+        print(hit.title, hit.meta.score)
 
     return jsonify({
-        "data": list(titles)
+        "data": response
     })

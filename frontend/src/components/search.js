@@ -176,16 +176,15 @@ export default class Search extends Component {
       exchanges: this.state.selectedExchanges,
       topics: this.state.selectedTopics
     }
-    try {
-      await axios.post('/api/search', payload, {
-        headers: {
-          'Content-Type': 'application/json',
+
+    this.props.history.push( 
+      {
+        pathname: '/result',
+        state: {
+          payload
         }
-      });
-    } catch(error) {
-      console.log("ERROR: Could not perform search query");
-      console.log(error);
-    }
+      } 
+    );
     
   }
 
