@@ -146,12 +146,22 @@ def get_article(article_id):
     num_words = len(found.body.split())
     read_time = int(round(num_words/170, 0))
 
+    try:
+        topics_list = list(found.topics)
+    except:
+        topics_list = ["General"]
+
+    try: 
+        places_list = list(found.places)
+    except:
+        places_list = []
+
     result = {
         "title": found.title.replace("<", "").replace(">", "").lower(),
         "body": found.body.replace("<", "").replace(">", ""),
         "date": found.date.strftime("%B %d, %Y / %I:%M %p"),
-        "topics": list(found.topics),
-        "places": list(found.places),
+        "topics": topics_list,
+        "places": places_list,
         "read_time": read_time
     }
 
