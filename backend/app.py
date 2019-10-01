@@ -3,6 +3,8 @@ from elasticsearch_dsl import Search
 from elasticsearch_dsl.connections import connections
 from datetime import datetime
 
+from article import Article
+
 connections.create_connection(hosts=["localhost"])
 
 app = Flask(__name__)
@@ -122,7 +124,7 @@ def search():
         result = {
             "title": hit.title.replace("<", "").replace(">", ""),
             "summary": hit.body[:252] + "...",
-            "date": datetime.fromisoformat(hit.date).strftime("%d %B, %Y"),
+            "date": datetime.fromisoformat(hit.date).strftime("%B %d, %Y"),
             "id": hit.meta.id
         }
 
@@ -134,3 +136,26 @@ def search():
     return jsonify({
         "data": response
     })
+
+@app.route("/article/<int:article_id>")
+def get_article(article_id):
+    print(article_id)
+
+    found = Article.get(id=article_id)
+
+    num_words = len(found.body.split())
+    read_time = int(round(num_words/170, 0))
+
+    result = {
+        "title": found.title,
+        "body": found.body.replace("\n", "<br/>"),
+        "date": found.date.strftime("%B %d, %Y"),
+        "topics": list(found.topics),
+        "places": list(found.places),
+        "read_time": read_time
+    }
+
+    return jsonify(
+        result
+    )
+
