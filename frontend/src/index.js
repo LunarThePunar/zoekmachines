@@ -5,6 +5,7 @@ import ReactDOM from "react-dom";
 
 import Search from "./components/search";
 import Result from "./components/results/result";
+import Article from "./components/article";
 
 
 class App extends Component {
@@ -14,6 +15,7 @@ class App extends Component {
         <Switch>
           <Route path="/" component={Search} exact={true} />
           <Route path="/result" component={Result} exact={true} />
+          <Route path="/article" component={Article} exact={true} />
         </Switch>
       </BrowserRouter>
     );

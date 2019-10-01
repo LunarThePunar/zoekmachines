@@ -147,9 +147,9 @@ def get_article(article_id):
     read_time = int(round(num_words/170, 0))
 
     result = {
-        "title": found.title,
-        "body": found.body.replace("\n", "<br/>"),
-        "date": found.date.strftime("%B %d, %Y"),
+        "title": found.title.replace("<", "").replace(">", "").lower(),
+        "body": found.body.replace("<", "").replace(">", ""),
+        "date": found.date.strftime("%B %d, %Y / %I:%M %p"),
         "topics": list(found.topics),
         "places": list(found.places),
         "read_time": read_time
