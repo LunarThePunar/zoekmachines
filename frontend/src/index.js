@@ -4,7 +4,7 @@ import React, {Component} from "react";
 import ReactDOM from "react-dom";
 
 import Search from "./components/search";
-import Result from "./components/result";
+import Result from "./components/results/result";
 
 
 class App extends Component {

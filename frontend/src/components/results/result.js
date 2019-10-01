@@ -1,16 +1,22 @@
-import "./search.css";
+import "./result.css";
+import "./resultHeader.css";
 import React, {Component} from "react";
 import Sidebar from "react-sidebar";
 import Select from 'react-select';
 
+import ResultBody from "./resultbody"
+
 const axios = require('axios');
 
-export default class Search extends Component {
+export default class Results extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
+      ...this.props.location.state,
       sidebarOpen: false,
+      results: [],
+      showResults: true,
       people: [],
       orgs: [],
       places: [],
@@ -21,17 +27,15 @@ export default class Search extends Component {
       selectedPlaces: [],
       selectedTopics: [],
       selectedExchanges: [],
-      query: ""
     };
-    this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
-    this.content = this.content.bind(this);
-    this.handleKeyPress = this.handleKeyPress.bind(this);
-  }
 
-  handleChange = selectedOption => {
-    this.setState({ selectedOption });
-    console.log(`Option selected:`, selectedOption);
-  };
+    this.body = this.body.bind(this);
+    this.header = this.header.bind(this);
+    this.render = this.render.bind(this);
+    this.componentDidMount = this.componentDidMount.bind(this);
+    this.selectPlaces = this.selectPlaces.bind(this);
+    this.content = this.content.bind(this);
+  }
 
   handleQuery = query => {
     this.setState( {
@@ -39,59 +43,10 @@ export default class Search extends Component {
     })
   }
 
-  selectPeople = option => {
-    var arr = [];
-    if (option) {
-      option.forEach(item => arr.push(item["value"]));
+  handleKeyPress = (event) => {
+    if(event.key === 'Enter'){
+      this.search();
     }
-
-    this.setState({
-      selectedPeople: arr
-    });
-  }
-
-  selectOrgs = option => {
-    var arr = [];
-    if (option) {
-      option.forEach(item => arr.push(item["value"]));
-    }
-
-    this.setState({
-      selectedOrgs: arr
-    });
-  }
-
-  selectTopics = option => {
-    var arr = [];
-    if (option) {
-      option.forEach(item => arr.push(item["value"]));
-    }
-
-    this.setState({
-      selectedTopics: arr
-    });
-  }
-
-  selectPlaces = option => {
-    var arr = [];
-    if (option) {
-      option.forEach(item => arr.push(item["value"]));
-    }
-
-    this.setState({
-      selectedPlaces: arr
-    });
-  }
-
-  selectExchanges = option => {
-    var arr = [];
-    if (option) {
-      option.forEach(item => arr.push(item["value"]));
-    }
-
-    this.setState({
-      selectedExchanges: arr
-    });
   }
 
   async loadPeople() {
@@ -159,7 +114,28 @@ export default class Search extends Component {
     }
   }
 
+  onSetSidebarOpen(open) {
+    this.setState({ sidebarOpen: open });
+  }
+
   async componentDidMount() {
+    axios.post('/api/search', this.state.payload, {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+    .then((response) => {
+      console.log(response);
+      this.setState({
+        results: response.data['data'],
+        query: this.state.payload.query
+      })
+    })
+    .catch(function (error) {
+      console.log("ERROR: Could not perform search query");
+      console.log(error);
+    });
+
     await this.loadPeople();
     await this.loadOrgs();
     await this.loadPlaces();
@@ -167,8 +143,92 @@ export default class Search extends Component {
     await this.loadExchanges();
   }
 
+  selectPeople = option => {
+    var arr = [];
+    if (option) {
+      option.forEach(item => arr.push(item["value"]));
+    }
 
-  search() {
+    this.setState({
+      selectedPeople: arr
+    });
+  }
+
+  selectOrgs = option => {
+    var arr = [];
+    if (option) {
+      option.forEach(item => arr.push(item["value"]));
+    }
+
+    this.setState({
+      selectedOrgs: arr
+    });
+  }
+
+  selectTopics = option => {
+    var arr = [];
+    if (option) {
+      option.forEach(item => arr.push(item["value"]));
+    }
+
+    this.setState({
+      selectedTopics: arr
+    });
+  }
+
+  selectPlaces = option => {
+    var arr = [];
+    if (option) {
+      option.forEach(item => arr.push(item["value"]));
+    }
+
+    this.setState({
+      selectPlaces: arr
+    });
+  }
+
+  selectExchanges = option => {
+    var arr = [];
+    if (option) {
+      option.forEach(item => arr.push(item["value"]));
+    }
+
+    this.setState({
+      selectedExchanges: arr
+    });
+  }
+
+  body() {
+    return (
+      this.state.results.map(x => <ResultBody title={x.title} summary={x.summary} id={x.id} date={x.date}/>)
+    );
+  }
+
+  header() {
+    return(
+      <div className="navBar">
+        <div >
+          <input className="searchbar" value={this.state.query} onChange={this.handleQuery} onKeyPress={this.handleKeyPress} />
+        </div>
+        <div className="optionsBar">
+          <div onClick={() => this.setState({
+                showResults: true,
+              })} className={this.state.showResults ? 'resultButtonSelected': 'resultButton'}>
+            Results
+          </div>
+
+          <div onClick={() => this.setState({
+                showResults:false
+              })} className={!this.state.showResults ? 'resultButtonSelected': 'resultButton'}>
+            Advanced
+          </div>
+
+        </div>
+      </div>
+    )
+  }
+
+  async search() {
     const payload = {
       query: this.state.query,
       places: this.state.selectedPlaces,
@@ -178,14 +238,23 @@ export default class Search extends Component {
       topics: this.state.selectedTopics
     }
 
-    this.props.history.push( 
-      {
-        pathname: '/result',
-        state: {
-          payload
+    axios.post('/api/search', payload, {
+        headers: {
+          'Content-Type': 'application/json',
         }
-      } 
-    );
+      })
+      .then((response) => {
+        this.setState({
+          results: response.data['data'],
+          showResults: true
+        });
+        console.log(this.state);
+        this.forceUpdate();
+      })
+      .catch(function (error) {
+        console.log("ERROR: Could not perform search query");
+        console.log(error);
+      });
   }
 
   content () {
@@ -231,42 +300,19 @@ export default class Search extends Component {
           isSearchable={true}
           isMulti={true}
         />
-        <input onClick={() => this.search()} type="button" value="Search" className="button"></input>
       </div>
     );
   }
 
-  onSetSidebarOpen(open) {
-    this.setState({ sidebarOpen: open });
-  }
-
-  handleKeyPress = (event) => {
-    if(event.key === 'Enter'){
-      this.search();
-    }
-  }
-
   render() {
     return (
-      <Sidebar
-        sidebar={this.content()}
-        open={this.state.sidebarOpen}
-        onSetOpen={this.onSetSidebarOpen}
-        styles={{ sidebar: { background: "white", padding: "10px", minWidth: "350px"} }}
-      >
-      <div className="index">
-        <div className="logo">
-        </div>
-        <div className="query">
-          <input className="searchbar" value={this.state.query} onChange={this.handleQuery} onKeyPress={this.handleKeyPress}></input>
-          <div className="searchbutton">
-            <input onClick={() => this.search()} type="button" value="Search" className="button"></input>
-            <input onClick={() => this.onSetSidebarOpen(true)} type="button" value="Advanced Search" className="button"></input>
-            <input onClick={() => console.log(this.state)} type="button" value="Test" className="button"></input>
+        <div>
+          {/* <ResultHeader data={this.state}/> */}
+          <this.header />
+          <div className="resultList">
+           {this.state.showResults ? this.body() : <this.content />}
           </div>
         </div>
-      </div>
-      </Sidebar>
     );
   }
 }

@@ -1,0 +1,60 @@
+.searchbar {
+    margin-bottom: 0px;
+    border: 1px solid #dfe1e5;
+    border-radius: 24px;
+    height: 44px;
+    width: 582px;
+    box-shadow: none;
+    padding: 0 16px;
+    font-size: 13px;
+    font-weight: bold;
+    font-family: arial,sans-serif;
+  
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Opera and Firefox */
+}
+
+.navBar {
+    height: 123px;
+    padding-top: 20px;
+    padding-left: 100px;
+    position:fixed;
+    top: 0px;
+    background: #ffffff;
+    width: 100%;
+    border-bottom: 1px solid #dfe1e5;
+}
+
+.optionsBar {
+    margin: none;
+}
+
+.resultButton {
+    padding: 16px 12px 12px 10px;
+    margin: 11px 1px 0;
+    line-height: 16px;
+    color: #5f6368;
+    background: #ffffff;
+    position: relative;
+    cursor: pointer;
+    outline-width: 0;
+    display: inline-block;
+}
+
+.resultButtonSelected {
+    padding: 16px 12px 12px 10px;
+    margin: 11px 1px 0;
+    line-height: 16px;
+    color: #1A73E8;
+    background: #ffffff;
+    position: relative;
+    cursor: pointer;
+    outline-width: 0;
+    display: inline-block;
+    border-bottom: 3px solid #1A73E8;
+}
