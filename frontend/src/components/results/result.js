@@ -5,6 +5,8 @@ import Select from 'react-select';
 
 import ResultBody from "./resultbody"
 
+import logo from '../resources/reutel_logo.png';
+
 const axios = require('axios');
 
 export default class Results extends Component {
@@ -205,23 +207,28 @@ export default class Results extends Component {
 
   header() {
     return(
-      <div className="navBar">
-        <div >
-          <input className="searchbar" value={this.state.query} onChange={this.handleQuery} onKeyPress={this.handleKeyPress} />
-        </div>
-        <div className="optionsBar">
-          <div onClick={() => this.setState({
-                showResults: true,
-              })} className={this.state.showResults ? 'resultButtonSelected': 'resultButton'}>
-            Results
+      <div>
+        <div className="navBar">
+          <div >
+            <div className="logo">
+              <a className="logoImageRef"  href="/"><img className="logoImage" src={logo} alt="Google" height="40" width="140" data-atf="1"></img></a>
+            </div>
+            <input className="searchbar" value={this.state.query} onChange={this.handleQuery} onKeyPress={this.handleKeyPress} />
           </div>
+          <div className="optionsBar">
+            <div onClick={() => this.setState({
+                  showResults: true,
+                })} className={this.state.showResults ? 'resultButtonSelected': 'resultButton'}>
+              Results
+            </div>
 
-          <div onClick={() => this.setState({
-                showResults:false
-              })} className={!this.state.showResults ? 'resultButtonSelected': 'resultButton'}>
-            Advanced
+            <div onClick={() => this.setState({
+                  showResults:false
+                })} className={!this.state.showResults ? 'resultButtonSelected': 'resultButton'}>
+              Advanced
+            </div>
+
           </div>
-
         </div>
       </div>
     )

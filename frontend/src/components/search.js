@@ -3,6 +3,8 @@ import React, {Component} from "react";
 import Sidebar from "react-sidebar";
 import Select from 'react-select';
 
+import Reutle from './resources/reutel_logo.png'
+
 const axios = require('axios');
 
 export default class Search extends Component {
@@ -256,6 +258,7 @@ export default class Search extends Component {
       >
       <div className="index">
         <div className="logo">
+          <img className="logo__image" src={Reutle}></img>
         </div>
         <div className="query">
           <input className="searchbar" value={this.state.query} onChange={this.handleQuery} onKeyPress={this.handleKeyPress}></input>
