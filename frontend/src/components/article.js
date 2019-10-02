@@ -1,6 +1,6 @@
 import "./article.css"
 import React, {Component} from "react";
-import logo from './resources/reuters.png';
+import logo from './resources/reutel_logo.png';
 
 const axios = require('axios');
 
