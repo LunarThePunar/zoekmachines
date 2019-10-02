@@ -1,13 +1,15 @@
 import "./result.css";
 import "./resultHeader.css";
 import React, {Component} from "react";
-import Select from 'react-select';
+import ReactWordcloud from 'react-wordcloud';
 
 import ResultBody from "./resultbody"
 
 import logo from '../resources/reutel_logo.png';
 
 import LineChart from "./chart";
+
+import Collapsible from 'react-collapsible';
 
 const axios = require('axios');
 
@@ -30,15 +32,22 @@ export default class Results extends Component {
       selectedPlaces: [],
       selectedTopics: [],
       selectedExchanges: [],
-      datapoints: []
+      datapoints: [],
+      wordcloud: [],
+      places_facets: [],
+      people_facets: [],
+      topics_facets: [],
+      exchanges_facets: [],
+      orgs_facets: [],
+      companies_facets: []
     };
 
     this.body = this.body.bind(this);
     this.header = this.header.bind(this);
     this.render = this.render.bind(this);
     this.componentDidMount = this.componentDidMount.bind(this);
-    this.selectPlaces = this.selectPlaces.bind(this);
     this.content = this.content.bind(this);
+    this.facet = this.facet.bind(this);
   }
 
   handleQuery = query => {
@@ -53,75 +62,6 @@ export default class Results extends Component {
     }
   }
 
-  async loadPeople() {
-    try {
-      const response = await axios.get("/api/people");
-      const values = response.data.map(x => ({value: x, label: x}));
-      this.setState({
-        people: values
-      });
-    } catch(error) {
-      console.log("ERROR: Failed to update people data.");
-      console.log(error);  
-    }
-  }
-
-  async loadOrgs() {
-    try {
-      const response = await axios.get("/api/orgs");
-      const values = response.data.map(x => ({value: x, label: x}));
-      this.setState({
-        orgs: values
-      });
-    } catch(error) {
-      console.log("ERROR: Failed to update organisations data.");
-      console.log(error);  
-    }
-  }
-
-  async loadTopics() {
-    try {
-      const response = await axios.get("/api/topics");
-      const values = response.data.map(x => ({value: x, label: x}));
-      this.setState({
-        topics: values
-      });
-    } catch(error) {
-      console.log("ERROR: Failed to update topics data.");
-      console.log(error);  
-    }
-  }
-
-  async loadPlaces() {
-    try {
-      const response = await axios.get("/api/places");
-      const values = response.data.map(x => ({value: x, label: x}));
-      this.setState({
-        places: values
-      });
-    } catch(error) {
-      console.log("ERROR: Failed to update places data.");
-      console.log(error);  
-    }
-  }
-
-  async loadExchanges() {
-    try {
-      const response = await axios.get("/api/exchanges");
-      const values = response.data.map(x => ({value: x, label: x}));
-      this.setState({
-        exchanges: values
-      });
-    } catch(error) {
-      console.log("ERROR: Failed to update exchange data.");
-      console.log(error);  
-    }
-  }
-
-  onSetSidebarOpen(open) {
-    this.setState({ sidebarOpen: open });
-  }
-
   async componentDidMount() {
     axios.post('/api/search', this.state.payload, {
       headers: {
@@ -133,80 +73,56 @@ export default class Results extends Component {
       this.setState({
         results: response.data['data'],
         datapoints: response.data['chart'],
-        query: this.state.payload.query
+        query: this.state.payload.query,
+        wordcloud: response.data['wordcloud'],
+        people_facets: response.data['facets']['people'],
+        places_facets: response.data['facets']['places'],
+        topics_facets: response.data['facets']['topics'],
+        orgs_facets: response.data['facets']['orgs'],
+        companies_facets: response.data['facets']['companies'],
+        exchanges_facets: response.data['facets']['exchanges'],
       })
     })
     .catch(function (error) {
       console.log("ERROR: Could not perform search query");
       console.log(error);
     });
-
-    await this.loadPeople();
-    await this.loadOrgs();
-    await this.loadPlaces();
-    await this.loadTopics();
-    await this.loadExchanges();
-  }
-
-  selectPeople = option => {
-    var arr = [];
-    if (option) {
-      option.forEach(item => arr.push(item["value"]));
-    }
-
-    this.setState({
-      selectedPeople: arr
-    });
-  }
-
-  selectOrgs = option => {
-    var arr = [];
-    if (option) {
-      option.forEach(item => arr.push(item["value"]));
-    }
-
-    this.setState({
-      selectedOrgs: arr
-    });
-  }
-
-  selectTopics = option => {
-    var arr = [];
-    if (option) {
-      option.forEach(item => arr.push(item["value"]));
-    }
-
-    this.setState({
-      selectedTopics: arr
-    });
-  }
-
-  selectPlaces = option => {
-    var arr = [];
-    if (option) {
-      option.forEach(item => arr.push(item["value"]));
-    }
-
-    this.setState({
-      selectPlaces: arr
-    });
-  }
-
-  selectExchanges = option => {
-    var arr = [];
-    if (option) {
-      option.forEach(item => arr.push(item["value"]));
-    }
-
-    this.setState({
-      selectedExchanges: arr
-    });
   }
 
   body() {
+    const options = {
+      colors: ['rgb(40, 82, 233)', 'rgb(244, 161, 15)', 'rgb(215, 21, 31)', 'rgb(39, 142, 50)'],
+      enableTooltip: true,
+      deterministic: true,
+      fontFamily: 'sans-serif',
+      fontSizes: [20, 100],
+      rotations: 0,
+      rotationAngles: [0],
+      fontStyle: 'normal',
+      fontWeight: 'bold',
+      transitionDuration: 300,
+      transition: false
+    };
     return (
-      this.state.results.map(x => <ResultBody title={x.title} summary={x.summary} id={x.id} date={x.date}/>)
+      <div className="resultList">
+        <div className="wordCloud">
+        <ReactWordcloud options={options} words={this.state.wordcloud} />
+        </div>
+        {this.state.results.map(x => <ResultBody title={x.title} summary={x.summary} id={x.id} date={x.date}/>)}
+      </div>
     );
+  }
+
+  facet (title, facet_list) {
+    console.log(title);
+    console.log(facet_list)
+    return (
+      <div>
+        <Collapsible trigger={<h2 className="facetTitle">{title}</h2>}>
+        {facet_list.map(x => <div className="facetName">{x.name} ({x.count})</div>)}
+        </Collapsible>
+      </div>
+    )
   }
 
   header() {
@@ -229,7 +145,7 @@ export default class Results extends Component {
             <div onClick={() => this.setState({
                   showResults:false
                 })} className={!this.state.showResults ? 'resultButtonSelected': 'resultButton'}>
-              Advanced
+              Trends
             </div>
 
           </div>
@@ -257,9 +173,7 @@ export default class Results extends Component {
         this.setState({
           results: response.data['data'],
           datapoints: response.data['chart'],
-          showResults: true
         });
-        console.log(this.state);
         this.forceUpdate();
       })
       .catch(function (error) {
@@ -271,64 +185,26 @@ export default class Results extends Component {
   content () {
     return (
       <div>
-        <h3 className="header">Country</h3>
-        <Select
-          value={this.selectedOption}
-          onChange={this.selectPlaces}
-          options={this.state.places}
-          isSearchable={true}
-          isMulti={true}
-        />
-        <h3 className="header">Topics</h3>
-        <Select
-          value={this.selectedOption}
-          onChange={this.selectTopics}
-          options={this.state.topics}
-          isSearchable={true}
-          isMulti={true}
-        />
-        <h3 className="header">People</h3>
-        <Select
-          value={this.selectedOption}
-          onChange={this.selectPeople}
-          options={this.state.people}
-          isSearchable={true}
-          isMulti={true}
-        />
-        <h3 className="header">Organisations</h3>
-        <Select
-          value={this.selectedOption}
-          onChange={this.selectOrgs}
-          options={this.state.orgs}
-          isSearchable={true}
-          isMulti={true}
-        />
-        <h3 className="header">Exchanges</h3>
-        <Select
-          value={this.selectedOption}
-          onChange={this.selectExchanges}
-          options={this.state.exchanges}
-          isSearchable={true}
-          isMulti={true}
-        />
+        <div className="chart">
+          <LineChart datapoints = {this.state.datapoints}/>
+        </div>
       </div>
     );
   }
 
   render() {
-
     return (
         <div>
-          {/* <ResultHeader data={this.state}/> */}
           <this.header />
-
-          <div className="resultList">
-           {this.state.showResults ? this.body() : <this.content />}
-           <div className="chart">
-             <LineChart datapoints = {this.state.datapoints}/>
+          <div className="facets">
+          {this.facet("Topics", this.state.topics_facets)}
+          {this.facet("Places", this.state.places_facets)}
+          {this.facet("Companies", this.state.companies_facets)}
+          {this.facet("Organisations", this.state.orgs_facets)}
+          {this.facet("Exchanges", this.state.exchanges_facets)}
+          {this.facet("People", this.state.people_facets)}
           </div>
-          </div>
-
+          {this.state.showResults ? this.body() : <this.content />}
         </div>
     );
   }

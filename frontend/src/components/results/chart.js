@@ -4,7 +4,6 @@ var CanvasJSChart = CanvasJSReact.CanvasJSChart;
  
 class LineChart extends Component {
 	render() {
-        console.log(this.props);
 		const options = {
 			animationEnabled: true,
 			theme: "light2", // "light1", "dark1", "dark2"
@@ -20,8 +19,8 @@ class LineChart extends Component {
 				interval: 1
 			},
 			data: [{
-				type: "bar",
-				toolTipContent: "Month {x}: {y}%",
+				type: "line",
+				toolTipContent: "Month {x}: {y} hits",
                 dataPoints: [
                     { y:  this.props.datapoints[0], label: "January" },
                     { y:  this.props.datapoints[1], label: "February" },

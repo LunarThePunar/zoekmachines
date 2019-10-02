@@ -258,7 +258,7 @@ export default class Search extends Component {
       >
       <div className="index">
         <div className="logoMain">
-          <img className="logo__image" src={Reutle}></img>
+          <img className="logo__image" alt="Reutle" src={Reutle}></img>
         </div>
         <div className="query">
           <form>
