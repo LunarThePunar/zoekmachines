@@ -261,11 +261,13 @@ export default class Search extends Component {
           <img className="logo__image" src={Reutle}></img>
         </div>
         <div className="query">
-          <input className="searchbar" value={this.state.query} onChange={this.handleQuery} onKeyPress={this.handleKeyPress}></input>
+          <form>
+          <input defaultValue="" className="searchbar" type="text" value={this.state.query} onChange={this.handleQuery} onKeyPress={this.handleKeyPress}></input>
           <div className="searchbutton">
             <input onClick={() => this.search()} type="button" value="Search" className="button"></input>
             <input onClick={() => this.onSetSidebarOpen(true)} type="button" value="Advanced Search" className="button"></input>
           </div>
+          </form>
         </div>
       </div>
       </Sidebar>
