@@ -324,10 +324,11 @@ export default class Results extends Component {
 
           <div className="resultList">
            {this.state.showResults ? this.body() : <this.content />}
+           <div className="chart">
+             <LineChart datapoints = {this.state.datapoints}/>
           </div>
-          <div className="chart">
-          <LineChart datapoints = {this.state.datapoints}/>
           </div>
+
         </div>
     );
   }
