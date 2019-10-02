@@ -13,7 +13,7 @@ export default class Article extends Component {
 
         this.state = {
             id: this.props.match.params.id ? this.props.match.params.id : 1, 
-            body: ""
+            body: "\n"
         };
     
         this.body = this.body.bind(this);
@@ -21,7 +21,7 @@ export default class Article extends Component {
       }
 
     async componentDidMount() {
-        axios.get('/article/' + this.state.id)
+        axios.get('/api/article/' + this.state.id)
         .then((response) => {
           this.setState({
             title: response.data['title'],

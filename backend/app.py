@@ -149,7 +149,7 @@ def search():
         "chart": barchart
     })
 
-@app.route("/article/<int:article_id>")
+@app.route("/api/article/<int:article_id>")
 def get_article(article_id):
     found = Article.get(id=article_id)
 
