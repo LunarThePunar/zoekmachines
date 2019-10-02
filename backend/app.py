@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from elasticsearch_dsl import Search
 from elasticsearch_dsl.connections import connections
 from datetime import datetime
+from collections import defaultdict
 
 from article import Article
 
@@ -91,7 +92,14 @@ def search():
         },
         "post_filter": {
             "bool": {"must": []}
-        }
+        },
+        "aggregations": {
+            "date": {
+                "date_histogram": {
+                    "field": "date", "interval": "day",
+                },
+            }
+        },
     }
 
     if topics:
@@ -118,6 +126,16 @@ def search():
     s = Search.from_dict(search_dict)
     search_result = s.execute()
 
+    # create bar for every month of the year
+    barchart = [0 for i in range(12)]
+    
+    for bucket in search_result.aggregations.date.buckets:
+        barchart[datetime.fromtimestamp(bucket.key / 1000).month] += bucket.doc_count
+
+
+    print("reeeee")
+    print(barchart)
+
     response = []
 
     for hit in search_result:
@@ -134,7 +152,8 @@ def search():
         print(hit.title, hit.meta.score)
 
     return jsonify({
-        "data": response
+        "data": response,
+        "chart": barchart
     })
 
 @app.route("/article/<int:article_id>")

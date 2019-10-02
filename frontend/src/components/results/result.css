@@ -1,5 +1,4 @@
 .resultList {
-    margin: 150px auto;
     margin-left: 150px;
 
     width: 500px;
@@ -26,4 +25,12 @@
     padding-bottom: 20px;
     width: 130px;
     height: 90px;
+}
+
+.chart {
+    position: absolute;
+    position: fixed;
+    left: 50%;
+    top: 200px;
+    width: 700px;
 }

@@ -7,6 +7,8 @@ import ResultBody from "./resultbody"
 
 import logo from '../resources/reutel_logo.png';
 
+import LineChart from "./chart";
+
 const axios = require('axios');
 
 export default class Results extends Component {
@@ -28,6 +30,7 @@ export default class Results extends Component {
       selectedPlaces: [],
       selectedTopics: [],
       selectedExchanges: [],
+      datapoints: []
     };
 
     this.body = this.body.bind(this);
@@ -129,6 +132,7 @@ export default class Results extends Component {
       console.log(response);
       this.setState({
         results: response.data['data'],
+        datapoints: response.data['chart'],
         query: this.state.payload.query
       })
     })
@@ -252,6 +256,7 @@ export default class Results extends Component {
       .then((response) => {
         this.setState({
           results: response.data['data'],
+          datapoints: response.data['chart'],
           showResults: true
         });
         console.log(this.state);
@@ -311,12 +316,17 @@ export default class Results extends Component {
   }
 
   render() {
+
     return (
         <div>
           {/* <ResultHeader data={this.state}/> */}
           <this.header />
+
           <div className="resultList">
            {this.state.showResults ? this.body() : <this.content />}
+          </div>
+          <div className="chart">
+          <LineChart datapoints = {this.state.datapoints}/>
           </div>
         </div>
     );
