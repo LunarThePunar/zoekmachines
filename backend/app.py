@@ -132,10 +132,6 @@ def search():
     for bucket in search_result.aggregations.date.buckets:
         barchart[datetime.fromtimestamp(bucket.key / 1000).month] += bucket.doc_count
 
-
-    print("reeeee")
-    print(barchart)
-
     response = []
 
     for hit in search_result:
@@ -147,9 +143,6 @@ def search():
         }
 
         response.append(result)
-
-    for hit in search_result:
-        print(hit.title, hit.meta.score)
 
     return jsonify({
         "data": response,
