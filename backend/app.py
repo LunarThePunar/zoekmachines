@@ -93,7 +93,6 @@ def search():
             }
         }
 
-
     search_dict = {
         "from": 0,
         "query": _query,
@@ -105,6 +104,31 @@ def search():
                 "date_histogram": {
                     "field": "date", "interval": "day",
                 },
+            },
+            "wordcloud": {
+                "significant_terms": {
+                    "field": "body",
+                    "mutual_information": {},
+                    "size": 50,
+                },
+            },
+            "topics": {
+                "terms": {"field": "topics"},
+            },
+            "places": {
+                "terms": {"field": "places"},
+            },
+            "orgs": {
+                "terms": {"field": "orgs"},
+            },
+            "exchanges": {
+                "terms": {"field": "exchanges"},
+            },
+            "companies": {
+                "terms": {"field": "companies"},
+            },
+            "people": {
+                "terms": {"field": "people"},
             }
         },
     }
@@ -137,9 +161,39 @@ def search():
     barchart = [0 for i in range(12)]
     
     for bucket in search_result.aggregations.date.buckets:
-        barchart[datetime.fromtimestamp(bucket.key / 1000).month] += bucket.doc_count
+        barchart[datetime.fromtimestamp(bucket.key / 1000).month] += bucket.doc_count 
+
+    facets = {
+            "topics": [
+                {"name": bucket.key, "count": bucket.doc_count}
+                for bucket in search_result.aggregations.topics.buckets
+            ],
+            "places": [
+                {"name": bucket.key, "count": bucket.doc_count}
+                for bucket in search_result.aggregations.places.buckets
+            ],
+            "people": [
+                {"name": bucket.key, "count": bucket.doc_count}
+                for bucket in search_result.aggregations.people.buckets
+            ],
+            "companies": [
+                {"name": bucket.key, "count": bucket.doc_count}
+                for bucket in search_result.aggregations.companies.buckets
+            ],
+            "orgs": [
+                {"name": bucket.key, "count": bucket.doc_count}
+                for bucket in search_result.aggregations.orgs.buckets
+            ],
+            "exchanges": [
+                {"name": bucket.key, "count": bucket.doc_count}
+                for bucket in search_result.aggregations.exchanges.buckets
+            ],
+        }
 
     response = []
+
+    wordcloud = [{"text": bucket.key, "value": bucket.doc_count}
+             for bucket in search_result.aggregations.wordcloud.buckets]
 
     for hit in search_result:
         result = {
@@ -153,7 +207,9 @@ def search():
 
     return jsonify({
         "data": response,
-        "chart": barchart
+        "chart": barchart,
+        "wordcloud": wordcloud,
+        "facets": facets
     })
 
 @app.route("/api/article/<int:article_id>")

@@ -10,6 +10,8 @@ from datetime import datetime
 from article import Article
 connections.create_connection(hosts=["localhost"])
 
+Article.init()
+
 
 def get_list_from_tag(text, tag):
     """
