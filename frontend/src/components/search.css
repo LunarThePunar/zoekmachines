@@ -69,7 +69,7 @@
     margin: 10px;
   }
 
-  @media screen and (min-width: 0px) and (max-width: 1280px) {
+  @media screen and (min-width: 0px) and (max-width: 728px) {
     .searchbarIndex { width: 80%; }
 }
   
