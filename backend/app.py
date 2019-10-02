@@ -151,8 +151,6 @@ def search():
 
 @app.route("/article/<int:article_id>")
 def get_article(article_id):
-    print(article_id)
-
     found = Article.get(id=article_id)
 
     num_words = len(found.body.split())
