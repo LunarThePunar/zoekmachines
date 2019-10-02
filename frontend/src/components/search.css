@@ -71,5 +71,6 @@
 
   @media screen and (min-width: 0px) and (max-width: 728px) {
     .searchbarIndex { width: 80%; }
+    .logo__image { width: 64%;}
 }
   
