@@ -81,15 +81,22 @@ def search():
     places = data['places']
     topics = data['topics']
 
-    search_dict = {
-        "from": 0,
-        "query": {
+    # on empty query, match any document
+    if not query:
+        _query = {"match_all": {}}
+    else:
+        _query = {   
             "bool": {
                 "must": [
                     {"query_string": {"query": query}},
                 ],
             }
-        },
+        }
+
+
+    search_dict = {
+        "from": 0,
+        "query": _query,
         "post_filter": {
             "bool": {"must": []}
         },
