@@ -19,6 +19,11 @@
                                   supported by Chrome, Opera and Firefox */
 }
 
+@media screen and (min-width: 0px) and (max-width: 750px) {
+    .searchbar { display: none; } 
+    .optionsBar { display: none; }
+}
+
 .navBar {
     height: 123px;
     padding-top: 20px;
