@@ -118,11 +118,12 @@ export default class Results extends Component {
       <div>
         <Collapsible trigger={<h2 className="facetTitle">People</h2>}>
           {facet_list.map(x => <div className={this.state.selectedPeople.includes(x.name) ? "facetNameActive" : "facetName"} 
-                                    onClick={async () => {
+                                    onClick={() => {
                                         this.setState({
                                             selectedPeople: [x.name]
+                                        }, async () => {
+                                          await this.search();
                                         });
-                                        await this.search();
                                     }
                                             }>
             {x.name} ({x.count})
@@ -137,11 +138,13 @@ export default class Results extends Component {
       <div>
         <Collapsible trigger={<h2 className="facetTitle">Places</h2>}>
           {facet_list.map(x => <div className={this.state.selectedPlaces.includes(x.name) ? "facetNameActive" : "facetName"} 
-                                    onClick={async () => {
+                                    onClick={() => {
                                         this.setState({
                                             selectedPlaces: [x.name]
+                                        }, async () => {
+                                          await this.search();
                                         });
-                                        await this.search();
+                                        
                                     }
                                             }>
             {x.name} ({x.count})
@@ -156,11 +159,12 @@ export default class Results extends Component {
       <div>
         <Collapsible trigger={<h2 className="facetTitle">Organisations</h2>}>
           {facet_list.map(x => <div className={this.state.selectedOrgs.includes(x.name) ? "facetNameActive" : "facetName"} 
-                                    onClick={async () => {
+                                    onClick={() => {
                                         this.setState({
                                             selectedOrgs: [x.name]
+                                        }, async () => {
+                                          await this.search();
                                         });
-                                        await this.search();
                                     }
                                             }>
             {x.name} ({x.count})
@@ -175,11 +179,13 @@ export default class Results extends Component {
       <div>
         <Collapsible trigger={<h2 className="facetTitle">Exchanges</h2>}>
           {facet_list.map(x => <div className={this.state.selectedExchanges.includes(x.name) ? "facetNameActive" : "facetName"} 
-                                    onClick={async () => {
+                                    onClick={() => {
                                         this.setState({
                                             selectedExchanges: [x.name]
+                                        }, async () => {
+                                          await this.search();
                                         });
-                                        await this.search();
+
                                     }
                                             }>
             {x.name} ({x.count})
@@ -194,11 +200,12 @@ export default class Results extends Component {
       <div>
         <Collapsible trigger={<h2 className="facetTitle">Topics</h2>}>
           {facet_list.map(x => <div className={this.state.selectedTopics.includes(x.name) ? "facetNameActive" : "facetName"} 
-                                    onClick={async () => {
+                                    onClick={() => {
                                         this.setState({
                                             selectedTopics: [x.name]
+                                        }, async () => {
+                                          await this.search();
                                         });
-                                        await this.search();
                                     }
                                             }>
             {x.name} ({x.count})
