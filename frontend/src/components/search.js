@@ -262,7 +262,7 @@ export default class Search extends Component {
         </div>
         <div className="query">
           <form>
-          <input defaultValue="" className="searchbarIndex" type="text" value={this.state.query} onChange={this.handleQuery} onKeyPress={this.handleKeyPress}></input>
+          <input className="searchbarIndex" type="text" value={this.state.query} defaultValue={this.state.query} onChange={this.handleQuery} onKeyPress={this.handleKeyPress}></input>
           <div className="searchbutton">
             <input onClick={() => this.search()} type="button" value="Search" className="button"></input>
             <input onClick={() => this.onSetSidebarOpen(true)} type="button" value="Advanced Search" className="button"></input>
