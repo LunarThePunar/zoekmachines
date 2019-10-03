@@ -47,7 +47,7 @@ export default class Results extends Component {
     this.render = this.render.bind(this);
     this.componentDidMount = this.componentDidMount.bind(this);
     this.content = this.content.bind(this);
-    this.facet = this.facet.bind(this);
+    this.facet_people = this.facet_people.bind(this);
   }
 
   handleQuery = query => {
@@ -113,13 +113,96 @@ export default class Results extends Component {
     );
   }
 
-  facet (title, facet_list) {
-    console.log(title);
-    console.log(facet_list)
+  facet_people (facet_list) {
     return (
       <div>
-        <Collapsible trigger={<h2 className="facetTitle">{title}</h2>}>
-        {facet_list.map(x => <div className="facetName">{x.name} ({x.count})</div>)}
+        <Collapsible trigger={<h2 className="facetTitle">People</h2>}>
+          {facet_list.map(x => <div className={this.state.selectedPeople.includes(x.name) ? "facetNameActive" : "facetName"} 
+                                    onClick={async () => {
+                                        this.setState({
+                                            selectedPeople: [x.name]
+                                        });
+                                        await this.search();
+                                    }
+                                            }>
+            {x.name} ({x.count})
+          </div>)}
+        </Collapsible>
+      </div>
+    )
+  }
+
+  facet_places (facet_list) {
+    return (
+      <div>
+        <Collapsible trigger={<h2 className="facetTitle">Places</h2>}>
+          {facet_list.map(x => <div className={this.state.selectedPlaces.includes(x.name) ? "facetNameActive" : "facetName"} 
+                                    onClick={async () => {
+                                        this.setState({
+                                            selectedPlaces: [x.name]
+                                        });
+                                        await this.search();
+                                    }
+                                            }>
+            {x.name} ({x.count})
+          </div>)}
+        </Collapsible>
+      </div>
+    )
+  }
+
+  facet_orgs (facet_list) {
+    return (
+      <div>
+        <Collapsible trigger={<h2 className="facetTitle">Organisations</h2>}>
+          {facet_list.map(x => <div className={this.state.selectedOrgs.includes(x.name) ? "facetNameActive" : "facetName"} 
+                                    onClick={async () => {
+                                        this.setState({
+                                            selectedOrgs: [x.name]
+                                        });
+                                        await this.search();
+                                    }
+                                            }>
+            {x.name} ({x.count})
+          </div>)}
+        </Collapsible>
+      </div>
+    )
+  }
+
+  facet_exchanges (facet_list) {
+    return (
+      <div>
+        <Collapsible trigger={<h2 className="facetTitle">Exchanges</h2>}>
+          {facet_list.map(x => <div className={this.state.selectedExchanges.includes(x.name) ? "facetNameActive" : "facetName"} 
+                                    onClick={async () => {
+                                        this.setState({
+                                            selectedExchanges: [x.name]
+                                        });
+                                        await this.search();
+                                    }
+                                            }>
+            {x.name} ({x.count})
+          </div>)}
+        </Collapsible>
+      </div>
+    )
+  }
+
+  facet_topics (facet_list) {
+    return (
+      <div>
+        <Collapsible trigger={<h2 className="facetTitle">Topics</h2>}>
+          {facet_list.map(x => <div className={this.state.selectedTopics.includes(x.name) ? "facetNameActive" : "facetName"} 
+                                    onClick={async () => {
+                                        this.setState({
+                                            selectedTopics: [x.name]
+                                        });
+                                        await this.search();
+                                    }
+                                            }>
+            {x.name} ({x.count})
+          </div>)}
         </Collapsible>
       </div>
     )
@@ -197,12 +280,11 @@ export default class Results extends Component {
         <div>
           <this.header />
           <div className="facets">
-          {this.facet("Topics", this.state.topics_facets)}
-          {this.facet("Places", this.state.places_facets)}
-          {this.facet("Companies", this.state.companies_facets)}
-          {this.facet("Organisations", this.state.orgs_facets)}
-          {this.facet("Exchanges", this.state.exchanges_facets)}
-          {this.facet("People", this.state.people_facets)}
+          {this.facet_topics(this.state.topics_facets)}
+          {this.facet_places(this.state.places_facets)}
+          {this.facet_orgs(this.state.orgs_facets)}
+          {this.facet_exchanges( this.state.exchanges_facets)}
+          {this.facet_people( this.state.people_facets)}
           </div>
           {this.state.showResults ? this.body() : <this.content />}
         </div>

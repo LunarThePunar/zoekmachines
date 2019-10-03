@@ -65,8 +65,6 @@
     font-family: sans-serif;
     color: #3f3f40;
     font-size: 18px;
-}
-.facetTitle:hover {
     cursor: pointer;
 }
 
@@ -77,4 +75,20 @@
     font-weight: lighter;
     color: #3f3f40;
     font-size: 11px;
+    cursor: pointer;
+}
+
+
+.facetNameActive {
+    margin-top: 0px;
+    margin-left: 10px;
+    font-family: sans-serif;
+    font-weight: bolder;
+    color: #1A0DAB;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.facetName:hover {
+    cursor: pointer;
 }
