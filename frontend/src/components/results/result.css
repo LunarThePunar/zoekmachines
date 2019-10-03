@@ -66,6 +66,9 @@
     color: #3f3f40;
     font-size: 18px;
 }
+.facetTitle:hover {
+    cursor: pointer;
+}
 
 .facetName {
     margin-top: 0px;
