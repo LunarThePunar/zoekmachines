@@ -214,7 +214,25 @@ def search():
 
 @app.route("/api/article/<int:article_id>")
 def get_article(article_id):
-    found = Article.get(id=article_id)
+
+    _query = {
+        "terms": {
+            "_id": [article_id] 
+        }
+    }
+
+    search_dict = {
+        "from": 0,
+        "query": _query
+    }
+
+    s = Search.from_dict(search_dict)
+    search_result = s.execute()
+
+    found = search_result[0]
+
+
+    # found = Article.get(id=article_id)
 
     num_words = len(found.body.split())
     read_time = int(round(num_words/170, 0))
@@ -232,7 +250,7 @@ def get_article(article_id):
     result = {
         "title": found.title.replace("<", "").replace(">", "").lower(),
         "body": found.body.replace("<", "").replace(">", ""),
-        "date": found.date.strftime("%B %d, %Y / %I:%M %p"),
+        "date": datetime.fromisoformat(found.date).strftime("%B %d, %Y / %I:%M %p"),
         "topics": topics_list,
         "places": places_list,
         "read_time": read_time
